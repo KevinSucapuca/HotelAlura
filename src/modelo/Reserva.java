@@ -7,10 +7,10 @@ public class Reserva {
 	private Integer id;
 	private Date dataE;
 	private Date dataS;
-	private String valor;
+	private Double valor;
 	private String formaPago;
 	
-	public Reserva(Date fechaE, Date fechaS, String valor, String formaPago) {
+	public Reserva(Date fechaE, Date fechaS, Double valor, String formaPago) {
 		super();
 		this.dataE = fechaE;
 		this.dataS = fechaS;
@@ -18,7 +18,7 @@ public class Reserva {
 		this.formaPago = formaPago;
 	}
 	
-	public Reserva(Integer id, Date dataE, Date dataS, String valor, String formaPago) {
+	public Reserva(Integer id, Date dataE, Date dataS, Double valor, String formaPago) {
 		super();
 		this.id = id;
 		this.dataE = dataE;
@@ -54,11 +54,11 @@ public class Reserva {
 		this.dataS = dataS;
 	}
 
-	public String getValor() {
+	public Double getValor() {
 		return valor;
 	}
 
-	public void setValor(String valor) {
+	public void setValor(Double valor) {
 		this.valor = valor;
 	}
 
