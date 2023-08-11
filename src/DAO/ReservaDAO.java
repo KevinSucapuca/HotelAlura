@@ -18,13 +18,13 @@ public class ReservaDAO {
 	}
 	
 	public void guardar (Reserva res) {
-		String sql = "INSERT INTO reservas (fecha_entrada,fecha_salida,valor,forma_de_pago)"
+		String sql = "INSERT INTO reserva (fecha_entrada,fecha_salida,precio,forma_de_pago)"
 				+ "VALUES(?,?,?,?)";
 		try (PreparedStatement pstm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			
 			pstm.setObject(1, res.getDataE());
 			pstm.setObject(2, res.getDataS());
-			pstm.setString(3, res.getValor());
+			pstm.setDouble(3, res.getValor());
 			pstm.setString(4, res.getFormaPago());
 			
 			pstm.executeUpdate();
