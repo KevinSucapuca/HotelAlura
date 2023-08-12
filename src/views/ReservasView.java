@@ -8,6 +8,8 @@ import java.awt.SystemColor;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
 import java.awt.Color;
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
@@ -23,6 +25,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -306,22 +310,21 @@ public class ReservasView extends JFrame {
 		txtFormaPago.setModel(new DefaultComboBoxModel(new String[] {"Tarjeta de Crédito", "Tarjeta de Débito", "Dinero en efectivo"}));
 		panel.add(txtFormaPago);
 
-		JPanel btnsiguiente = new JPanel();
-		btnsiguiente.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {		
-					guardarReserva();
-				} else {
-					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
-				}
-			}						
+		JButton btnSiguiente = new JButton("Reservar");
+		btnSiguiente.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {		
+		            guardarReserva();
+		        } else {
+		            JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
+		        }
+		    }						
 		});
-		btnsiguiente.setLayout(null);
-		btnsiguiente.setBackground(SystemColor.textHighlight);
-		btnsiguiente.setBounds(238, 493, 122, 35);
-		panel.add(btnsiguiente);
-		btnsiguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		btnSiguiente.setBackground(SystemColor.textHighlight);
+		btnSiguiente.setBounds(238, 493, 122, 35);
+		btnSiguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		panel.add(btnSiguiente);
 
 
 	}
@@ -340,13 +343,16 @@ public class ReservasView extends JFrame {
 		        // Convert java.util.Date to java.sql.Date
 		        Date dataE = new Date(utilDateE.getTime());
 		        Date dataS = new Date(utilDateS.getTime());
-		        
-		        Reserva reserva = new Reserva(dataE, dataS, txtValor.getText(), txtFormaPago.getSelectedItem().toString());
+		        String valorTexto = txtValor.getText();
+		        String valorNumericoTexto = valorTexto.replaceAll("[^0-9.]", ""); // Elimina cualquier caracter que no sea dígito o punto
+		        double valorNumerico = Double.parseDouble(valorNumericoTexto);
+		        Reserva reserva = new Reserva(dataE, dataS, valorNumerico, txtFormaPago.getSelectedItem().toString());
 		        reservaControl.guardar(reserva);
 		        
-		        RegistroHuesped registro = new RegistroHuesped();
+		        RegistroHuesped registro = new RegistroHuesped(reserva.getId());
 		        registro.setVisible(true);
 		        dispose();
+		        JOptionPane.showMessageDialog(this, "REserva Registrado");
 		    } else {
 		        JOptionPane.showMessageDialog(this, "Debes de llenar todos los campos");
 		    }
